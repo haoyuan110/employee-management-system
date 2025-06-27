@@ -1,0 +1,163 @@
+@use "./variables" as *;
+// 全局变量
+$primary-color: #409EFF;
+$success-color: #67C23A;
+$warning-color: #E6A23C;
+$danger-color: #F56C6C;
+$info-color: #909399;
+$text-color: #303133;
+$border-color: #DCDFE6;
+$background-color: #f5f7fa;
+
+// 重置和基础样式
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: $text-color;
+  background-color: $background-color;
+}
+
+a {
+  color: $primary-color;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+// 布局样式
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-container {
+  display: flex;
+  flex: 1;
+}
+
+.page-container {
+  flex: 1;
+  padding: 20px;
+  overflow: auto;
+}
+
+// 工具类
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.pull-left {
+  float: left;
+}
+
+.pull-right {
+  float: right;
+}
+
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+// 表单样式
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+// 表格样式
+.table-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+// 卡片样式
+.card-container {
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+// 响应式布局
+@media (max-width: 768px) {
+  .page-container {
+    padding: 10px;
+  }
+
+  .form-container,
+  .table-container {
+    padding: 15px;
+  }
+}
+
+// 动画效果
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+// Element Plus 组件覆盖
+.el-button {
+  font-weight: 500;
+}
+
+.el-table {
+  th {
+    background-color: #f8f8f9;
+    font-weight: 500;
+  }
+}
+
+.el-dialog {
+  border-radius: 8px;
+}
+
+.el-card {
+  border-radius: 8px;
+}
+
+// 自定义滚动条
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(144, 147, 153, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(144, 147, 153, 0.5);
+}
