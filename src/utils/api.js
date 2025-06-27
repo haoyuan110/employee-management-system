@@ -1,23 +1,21 @@
 import axios from 'axios'
-import {useAuthStore} from '@/stores/auth'
+import {useUserStore} from '@/stores/auth'
 
 // 创建axios实例
 const apiClient = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+    baseURL: '',
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
-    }
+    },
+    withCredentials: true
 })
 
 // 请求拦截器
 apiClient.interceptors.request.use(
     (config) => {
-        const authStore = useAuthStore()
-        if (authStore.token) {
-            config.headers.Authorization = `Bearer ${authStore.token}`
-        }
+        const authStore = useUserStore()
         return config
     },
     (error) => {
@@ -36,7 +34,7 @@ apiClient.interceptors.response.use(
 
             if (status === 40100) {
                 // 未授权，跳转到登录页
-                const authStore = useAuthStore()
+                const authStore = useUserStore()
                 authStore.logout()
                 window.location.href = '/employee/login'
             } else if (status === 40101) {

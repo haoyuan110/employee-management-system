@@ -5,9 +5,9 @@
       <div class="col-12">
         <ProfileCard />
       </div>
-      <div class="col-12">
-        <AttendanceCard />
-      </div>
+<!--      <div class="col-12">-->
+<!--        <AttendanceCard />-->
+<!--      </div>-->
     </div>
   </div>
 </template>

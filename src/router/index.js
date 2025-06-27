@@ -8,7 +8,7 @@ const routes = [
     component: () => import('@/views/LoginView.vue'),
     meta: { requiresAuth: false }
   },
-  {
+  {// todo 考勤
     path: '/',
     name: 'Home',
     component: () => import('@/views/HomeView.vue'),
