@@ -1,57 +1,63 @@
 import axios from 'axios'
-import { useAuthStore } from '@/stores/auth'
+import {useAuthStore} from '@/stores/auth'
 
 // 创建axios实例
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  }
+    baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+    timeout: 10000,
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
 })
 
 // 请求拦截器
 apiClient.interceptors.request.use(
-  (config) => {
-    const authStore = useAuthStore()
-    if (authStore.token) {
-      config.headers.Authorization = `Bearer ${authStore.token}`
+    (config) => {
+        const authStore = useAuthStore()
+        if (authStore.token) {
+            config.headers.Authorization = `Bearer ${authStore.token}`
+        }
+        return config
+    },
+    (error) => {
+        return Promise.reject(error)
     }
-    return config
-  },
-  (error) => {
-    return Promise.reject(error)
-  }
 )
 
 // 响应拦截器
 apiClient.interceptors.response.use(
-  (response) => {
-    return response.data
-  },
-  (error) => {
-    if (error.response) {
-      const { status } = error.response
+    (response) => {
+        return response.data
+    },
+    (error) => {
+        if (error.response) {
+            const {status} = error.response
 
-      if (status === 401) {
-        // 未授权，跳转到登录页
-        const authStore = useAuthStore()
-        authStore.logout()
-        window.location.href = '/login'
-      } else if (status === 403) {
-        // 权限不足
-        console.error('权限不足:', error.response.data.message)
-      } else if (status === 404) {
-        // 资源不存在
-        console.error('请求的资源不存在')
-      } else if (status >= 500) {
-        // 服务器错误
-        console.error('服务器错误:', error.response.data.message)
-      }
+            if (status === 40100) {
+                // 未授权，跳转到登录页
+                const authStore = useAuthStore()
+                authStore.logout()
+                window.location.href = '/employee/login'
+            } else if (status === 40101) {
+                // 权限不足
+                console.error('权限不足:', error.response.data.message)
+            } else if (status === 40400) {
+                // 资源不存在
+                console.error('请求的资源不存在')
+            } else if (status === 40000) {
+                // 请求参数错误
+                console.error('请求参数错误')
+            } else if (status === 40001) {
+                // 请求数据为空
+                console.error('请求数据为空')
+            } else if (status === 50000) {
+                // 服务器错误
+                console.error('服务器错误:', error.response.data.message)
+            }
+        }
+        return Promise.reject(error)
     }
-    return Promise.reject(error)
-  }
 )
 
 /**
@@ -62,7 +68,7 @@ apiClient.interceptors.response.use(
  * @returns {Promise}
  */
 export function get(url, params = {}, config = {}) {
-  return apiClient.get(url, { params, ...config })
+    return apiClient.get(url, {params, ...config})
 }
 
 /**
@@ -73,7 +79,7 @@ export function get(url, params = {}, config = {}) {
  * @returns {Promise}
  */
 export function post(url, data = {}, config = {}) {
-  return apiClient.post(url, data, config)
+    return apiClient.post(url, data, config)
 }
 
 /**
@@ -84,7 +90,7 @@ export function post(url, data = {}, config = {}) {
  * @returns {Promise}
  */
 export function put(url, data = {}, config = {}) {
-  return apiClient.put(url, data, config)
+    return apiClient.put(url, data, config)
 }
 
 /**
@@ -94,7 +100,7 @@ export function put(url, data = {}, config = {}) {
  * @returns {Promise}
  */
 export function del(url, config = {}) {
-  return apiClient.delete(url, config)
+    return apiClient.delete(url, config)
 }
 
 /**
@@ -105,12 +111,12 @@ export function del(url, config = {}) {
  * @returns {Promise}
  */
 export function upload(url, formData, config = {}) {
-  return apiClient.post(url, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    },
-    ...config
-  })
+    return apiClient.post(url, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        ...config
+    })
 }
 
 export default apiClient

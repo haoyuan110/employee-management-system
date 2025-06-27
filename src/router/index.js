@@ -3,7 +3,7 @@ import { useUserStore } from '@/stores/auth'
 
 const routes = [
   {
-    path: '/login',
+    path: '/employee/login',
     name: 'Login',
     component: () => import('@/views/LoginView.vue'),
     meta: { requiresAuth: false }
@@ -117,7 +117,7 @@ router.beforeEach((to, from, next) => {
 
   // 检查是否需要认证
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    next('/login')
+    next('/employee/login')
     return
   }
 

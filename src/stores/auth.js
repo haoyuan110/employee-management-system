@@ -7,45 +7,42 @@ export const useUserStore = defineStore('auth', () => {
   const router = useRouter()
   const api = useApi()
 
-  const token = ref(localStorage.getItem('token'))
   const user = ref(JSON.parse(localStorage.getItem('user') || 'null'))
-  const permissions = ref(JSON.parse(localStorage.getItem('permissions') || '[]'))
   const roles = ref(JSON.parse(localStorage.getItem('roles') || '[]'))
+  const permissions = ref(JSON.parse(localStorage.getItem('permissions') || '[]'))
 
-  const isAuthenticated = computed(() => !!token.value)
+  const isAuthenticated = computed(() => !!user.value)
   const currentUser = computed(() => user.value)
   const userRoles = computed(() => roles.value)
   const userPermissions = computed(() => permissions.value)
 
   const login = async (credentials) => {
-    const response = await api.post('/auth/login', credentials)
-    token.value = response.token
-    user.value = response.user
-    roles.value = response.roles || []
-    permissions.value = response.permissions || []
+    const response = await api.post('/api/employee/login', credentials)
+    const employee = response.data
 
-    // 保存到本地存储
-    localStorage.setItem('token', token.value)
-    localStorage.setItem('user', JSON.stringify(user.value))
-    localStorage.setItem('roles', JSON.stringify(roles.value))
-    localStorage.setItem('permissions', JSON.stringify(permissions.value))
+    user.value = employee
+    roles.value = [employee.employeeRole] // 角色字段为 employeeRole
+    permissions.value = [] // 可以从后端扩展权限字段
 
-    return response
+    localStorage.setItem('user', JSON.stringify(employee))
+    localStorage.setItem('roles', JSON.stringify([employee.employeeRole]))
+    localStorage.setItem('permissions', JSON.stringify([]))
+
+    return employee
   }
 
   const logout = () => {
-    token.value = null
     user.value = null
     roles.value = []
     permissions.value = []
 
-    // 清除本地存储
-    localStorage.removeItem('token')
     localStorage.removeItem('user')
     localStorage.removeItem('roles')
     localStorage.removeItem('permissions')
 
-    router.push('/login')
+    api.post('/employee/logout').finally(() => {
+      router.push('/employee/login')
+    })
   }
 
   const hasRole = (role) => {
@@ -61,7 +58,6 @@ export const useUserStore = defineStore('auth', () => {
   }
 
   return {
-    token,
     user,
     roles,
     permissions,

@@ -37,7 +37,7 @@ const goToProfile = () => {
 
 const logout = () => {
   userStore.logout()
-  router.push('/login')
+  router.push('/employee/login')
 }
 </script>
 
