@@ -20,7 +20,7 @@ export const useAttendanceStore = defineStore('attendance', () => {
     return res
   }
 
-  const getRecords = async (params = {}) => {
+  const fetchRecords = async (params = {}) => {
     const res = await api.get('/attendance/records', { params })
     records.value = res.data
     total.value = res.total
@@ -38,7 +38,7 @@ export const useAttendanceStore = defineStore('attendance', () => {
     isCheckedIn,
     checkIn,
     checkOut,
-    getRecords,
+    fetchRecords,
     getStats
   }
 })
