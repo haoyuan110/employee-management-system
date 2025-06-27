@@ -28,7 +28,7 @@ watch(() => router.currentRoute.value, (to) => {
 // 检查用户认证状态
 watch(() => authStore.isAuthenticated, (isAuthenticated) => {
   if (!isAuthenticated && router.currentRoute.value.meta.requiresAuth) {
-    router.push('/employee/login')
+    router.push('/employee/employee/login')
   }
 })
 </script>
