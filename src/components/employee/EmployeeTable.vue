@@ -103,11 +103,14 @@ const filteredEmployees = computed(() => {
   if (!searchQuery.value) {
     return employeeStore.employees
   }
+
+  const query = searchQuery.value.toLowerCase()
+
   return employeeStore.employees.filter(employee => {
-    return (
-        employee.name.includes(searchQuery.value) ||
-        employee.employeeId.includes(searchQuery.value)
-    )
+    const name = employee.employeeName?.toLowerCase() || ''
+    const id = employee.employeeId?.toString?.() || ''
+
+    return name.includes(query) || id.includes(query)
   })
 })
 
