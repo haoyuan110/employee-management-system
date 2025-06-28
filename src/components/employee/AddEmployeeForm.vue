@@ -68,11 +68,18 @@ const form = ref(props.isEdit ? { ...props.employeeData } : {
 })
 
 const departments = [
-  { id: 1, name: '开发部' },
+  { id: 1, name: '产品部' },
   { id: 2, name: '设计部' },
-  { id: 3, name: '产品部' },
-  { id: 4, name: '市场部' },
-  { id: 5, name: '人力资源部' }
+  { id: 3, name: '技术部' },
+  { id: 4, name: '运营部' },
+  { id: 5, name: '客服部' },
+  { id: 6, name: '市场部' },
+  { id: 7, name: '商务部' },
+  { id: 8, name: '公关部' },
+  { id: 9, name: '品牌部' },
+  { id: 10, name: '财务部' },
+  { id: 11, name: '人力部' },
+  { id: 12, name: '行政部' },
 ]
 
 const emit = defineEmits(['success'])
