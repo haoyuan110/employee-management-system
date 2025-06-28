@@ -44,7 +44,7 @@ export const useEmployeeStore = defineStore('employee', () => {
     }
 
     const deleteEmployee = async (employeeId) => {
-        await api.delete(`/api/employees/${employeeId}`)
+        await api.post(`/api/employee/delete/${employeeId}`)
         employees.value = employees.value.filter(e => e.employeeId !== employeeId)
         total.value -= 1
     }
