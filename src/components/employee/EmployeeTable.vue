@@ -17,13 +17,13 @@
     </div>
     <el-table :data="filteredEmployees" border style="width: 100%">
       <el-table-column prop="employeeId" label="工号" width="60"/>
-      <el-table-column prop="employeeName" label="姓名" width="90"/> <!-- 修改 prop 为 employeeName -->
+      <el-table-column prop="employeeName" label="姓名" width="90"/>
       <el-table-column prop="gender" label="性别" width="60">
         <template #default="{ row }">
-          {{ row.gender === 0 ? '男' : '女' }} <!-- gender 是 0 表示男，1 表示女 -->
+          {{ row.gender === 0 ? '男' : '女' }}
         </template>
       </el-table-column>
-      <el-table-column prop="departmentId" label="部门ID" width="90"/> <!-- 如果没有部门名称，可以先显示 departmentId -->
+      <el-table-column prop="departmentId" label="部门ID" width="90"/>
       <el-table-column prop="job" label="职位" width="120"/>
       <el-table-column prop="phone" label="电话" width="150"/>
       <el-table-column prop="email" label="邮箱" width="200"/>
@@ -76,12 +76,24 @@ import {Search} from '@element-plus/icons-vue'
 import {useEmployeeStore} from '@/stores/employee'
 import {ElMessage} from "element-plus";
 
+// 定义 emit
+const emit = defineEmits(['show-add-dialog', 'edit-employee'])
+
 const employeeStore = useEmployeeStore()
 
 const currentPage = ref(1)
 const pageSize = ref(10)
 const total = ref(0)
 const searchQuery = ref('')
+
+// 加载员工列表
+const fetchEmployees = async () => {
+  await employeeStore.getEmployees({
+    pageNum: currentPage.value,
+    pageSize: pageSize.value
+  })
+  total.value = employeeStore.total
+}
 
 const filteredEmployees = computed(() => {
   if (!searchQuery.value) {
@@ -95,35 +107,39 @@ const filteredEmployees = computed(() => {
   })
 })
 
-const fetchEmployees = async () => {
-  await employeeStore.getEmployees({
-    page: currentPage.value,
-    size: pageSize.value
-  })
-  total.value = employeeStore.total
-}
-
+// 搜索功能（支持工号或姓名）
 const handleSearch = () => {
-  // Search is handled by computed property
+  if (searchQuery.value) {
+    const result = employeeStore.employees.filter(emp =>
+        emp.employeeName.includes(searchQuery.value) ||
+        emp.employeeId.toString().includes(searchQuery.value)
+    )
+    filteredEmployees.value = result
+  } else {
+    fetchEmployees()
+  }
 }
 
+// 清除搜索条件
 const handleSearchClear = () => {
   searchQuery.value = ''
+  fetchEmployees()
 }
 
+// 显示添加对话框
 const showAddDialog = () => {
-  // Emit event to parent to show add dialog
   emit('show-add-dialog')
 }
 
+// 编辑员工
 const handleEdit = (employee) => {
-  // Emit event to parent to show edit dialog
   emit('edit-employee', employee)
 }
 
+// 删除员工
 const handleDelete = async (employee) => {
   try {
-    await employeeStore.deleteEmployee(employee.id)
+    await employeeStore.deleteEmployee(employee.employeeId)
     ElMessage.success('删除成功')
     await fetchEmployees()
   } catch (error) {

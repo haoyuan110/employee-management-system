@@ -14,12 +14,6 @@
           label-width="80px"
           label-position="top"
       >
-        <el-form-item label="工号" prop="employeeId">
-          <el-input
-              v-model.number="formData.employeeId"
-              placeholder="请输入员工工号"
-          />
-        </el-form-item>
         <el-form-item label="账号" prop="employeeAccount">
           <el-input
               v-model="formData.employeeAccount"
@@ -64,16 +58,11 @@ const loginForm = ref(null)
 const loading = ref(false)
 
 const formData = ref({
-  employeeId: null,
   employeeAccount: '',
   employeePassword: ''
 })
 
 const rules = {
-  employeeId: [
-    { required: true, message: '请输入员工工号', trigger: 'blur' },
-    { type: 'number', min: 1, message: '工号必须大于0', trigger: 'blur' }
-  ],
   employeeAccount: [
     { required: true, message: '请输入账号', trigger: 'blur' }
   ],

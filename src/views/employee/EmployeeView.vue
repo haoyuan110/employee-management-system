@@ -2,7 +2,6 @@
   <div class="employee-view">
     <div class="header">
       <h2 class="page-title">员工管理</h2>
-      <el-button type="primary" @click="showAddDialog">添加员工</el-button>
     </div>
     <EmployeeTable @show-add-dialog="showAddDialog" @edit-employee="handleEdit"/>
     <AddEmployeeView
@@ -15,10 +14,9 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from 'vue'
+import {ref} from 'vue'
 import EmployeeTable from '@/components/employee/EmployeeTable.vue'
 import AddEmployeeView from '@/views/employee/AddEmployeeView.vue'
-import api from "@/utils/api.js";
 
 const showAddDialogVisible = ref(false)
 const currentEmployee = ref({})

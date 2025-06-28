@@ -15,18 +15,12 @@ export const useEmployeeStore = defineStore('employee', () => {
     ])
 
     const getEmployees = async (params = {}) => {
-        // 设置默认分页参数
-        const defaultParams = {
-            pageNum: 1,
-            pageSize: 10,
-            // ...params
-        };
-
-        const res = await api.get('/api/employee/search', {params: defaultParams})
+        const res = await api.get('/api/employee/search', { params })
         employees.value = res.data.records || []
         total.value = res.data.total
         return res
     }
+
 
     const getEmployeeById = async (employeeId) => {
         const res = await api.get(`/api/employee/${employeeId}`)
@@ -34,7 +28,7 @@ export const useEmployeeStore = defineStore('employee', () => {
     }
 
     const addEmployee = async (employee) => {
-        const res = await api.post('/api/employee/register', employee)
+        const res = await api.post('/api/employee/add', employee)
         employees.value.unshift(res.data)
         total.value += 1
         return res.data
