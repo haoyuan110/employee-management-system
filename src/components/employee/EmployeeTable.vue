@@ -23,7 +23,11 @@
           {{ row.gender === 0 ? '男' : '女' }}
         </template>
       </el-table-column>
-      <el-table-column prop="departmentId" label="部门ID" width="90"/>
+      <el-table-column prop="departmentId" label="部门名字" width="90">
+        <template #default="{ row }">
+          {{ departmentName(row.departmentId) }}
+        </template>
+      </el-table-column>
       <el-table-column prop="job" label="职位" width="120"/>
       <el-table-column prop="phone" label="电话" width="150"/>
       <el-table-column prop="email" label="邮箱" width="200"/>
@@ -145,6 +149,27 @@ const handleDelete = async (employee) => {
   } catch (error) {
     ElMessage.error('删除失败')
   }
+}
+
+// 部门ID到名称的映射
+const departmentMap = {
+  1: '产品部',
+  2: '设计部',
+  3: '技术部',
+  4: '运营部',
+  5: '客服部',
+  6: '市场部',
+  7: '商务部',
+  8: '公关部',
+  9: '品牌部',
+  10: '财务部',
+  11: '人力部',
+  12: '行政部'
+}
+
+// 获取部门名称
+const departmentName = (departmentId) => {
+  return departmentMap[departmentId] || ''
 }
 
 onMounted(() => {
