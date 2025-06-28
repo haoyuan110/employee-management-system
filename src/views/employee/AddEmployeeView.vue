@@ -1,14 +1,14 @@
 <template>
   <el-dialog
-    v-model="visible"
-    :title="isEdit ? '编辑员工信息' : '添加新员工'"
-    width="50%"
-    @closed="handleClose"
+      v-model="visible"
+      :title="isEdit ? '编辑员工信息' : '添加新员工'"
+      width="50%"
+      @closed="handleClose"
   >
     <AddEmployeeForm
-      :employee-data="employeeData"
-      :is-edit="isEdit"
-      @success="handleSuccess"
+        :employee-data="employeeData"
+        :is-edit="isEdit"
+        @success="handleSuccess"
     />
   </el-dialog>
 </template>

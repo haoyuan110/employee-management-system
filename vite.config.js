@@ -33,7 +33,8 @@ export default defineConfig({
       '/api': { // 所有以 '/api' 开头的请求路径将被代理。
         target: 'http://localhost:8080', // 将这些请求代理到 http://localhost:8080。
         changeOrigin: true, // 改变请求的来源为目标服务器（即 localhost:8080）。
-        rewrite: (path) => path.replace(/^\/api/, '') // 重写请求路径，移除 '/api' 前缀。
+        rewrite: (path) => path // 不再删除 /api 前缀
+        // rewrite: (path) => path.replace(/^\/api/, '') // 重写请求路径，移除 '/api' 前缀。
       }
     }
   },

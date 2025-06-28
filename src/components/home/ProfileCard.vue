@@ -7,29 +7,29 @@
       </div>
     </template>
     <div class="profile-content">
-      <div class="avatar-container">
-        <el-avatar :size="100" :src="user.avatar" />
-      </div>
+      <!--      <div class="avatar-container">-->
+      <!--        <el-avatar :size="100" :src="user.avatar" />-->
+      <!--      </div>-->
       <div class="profile-info">
         <div class="info-item">
           <span class="label">姓名：</span>
-          <span class="value">{{ user.name }}</span>
+          <span class="value">{{ user.employeeName }}</span>
         </div>
         <div class="info-item">
           <span class="label">工号：</span>
           <span class="value">{{ user.employeeId }}</span>
         </div>
         <div class="info-item">
-          <span class="label">部门：</span>
-          <span class="value">{{ user.department }}</span>
+          <span class="label">部门id号：</span>
+          <span class="value">{{ user.departmentId }}</span>
         </div>
         <div class="info-item">
           <span class="label">职位：</span>
-          <span class="value">{{ user.position }}</span>
+          <span class="value">{{ user.job }}</span>
         </div>
         <div class="info-item">
           <span class="label">入职日期：</span>
-          <span class="value">{{ user.joinDate }}</span>
+          <span class="value">{{ user.createTime }}</span>
         </div>
       </div>
     </div>
@@ -37,7 +37,8 @@
 </template>
 
 <script setup>
-import { useUserStore } from '@/stores/auth'
+import {useUserStore} from '@/stores/auth'
+import {computed} from "vue";
 
 const userStore = useUserStore()
 const user = computed(() => userStore.user)

@@ -1,74 +1,81 @@
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { useApi } from '@/composables/useApi'
+import {defineStore} from 'pinia'
+import {ref, computed} from 'vue'
+import {useRouter} from 'vue-router'
+import {useApi} from '@/composables/useApi'
 
 export const useUserStore = defineStore('auth', () => {
-  const router = useRouter()
-  const api = useApi()
+    const router = useRouter()
+    const api = useApi()
 
-  const user = ref(JSON.parse(localStorage.getItem('user') || 'null'))
-  const roles = ref(JSON.parse(localStorage.getItem('roles') || '[]'))
-  const permissions = ref(JSON.parse(localStorage.getItem('permissions') || '[]'))
+    const user = ref(JSON.parse(localStorage.getItem('user') || 'null'))
+    const roles = ref(JSON.parse(localStorage.getItem('roles') || '[]'))
+    const permissions = ref(JSON.parse(localStorage.getItem('permissions') || '[]'))
 
-  const isAuthenticated = computed(() => !!user.value)
-  const currentUser = computed(() => user.value)
-  const userRoles = computed(() => roles.value)
-  const userPermissions = computed(() => permissions.value)
+    const isAuthenticated = computed(() => !!user.value)
+    const currentUser = computed(() => user.value)
+    const userRoles = computed(() => roles.value)
+    const userPermissions = computed(() => permissions.value)
 
-  const login = async (credentials) => {
-    const response = await api.post('/api/employee/login', credentials)
-    const employee = response.data
+    const roleMap = {
+        0: 'admin',
+        1: 'manager',
+        2: 'employee'
+    }
 
-    user.value = employee
-    roles.value = [employee.employeeRole] // 角色字段为 employeeRole
-    permissions.value = [] // 可以从后端扩展权限字段
+    const login = async (credentials) => {
+        const response = await api.post('/api/employee/login', credentials)
+        const employee = response.data
 
-    localStorage.setItem('user', JSON.stringify(employee))
-    localStorage.setItem('roles', JSON.stringify([employee.employeeRole]))
-    localStorage.setItem('permissions', JSON.stringify([]))
+        user.value = employee
+        const roleName = roleMap[employee.employeeRole] || 'employee' // 映射为字符串角色
+        roles.value = [roleName]
+        permissions.value = []
 
-    return employee
-  }
+        localStorage.setItem('user', JSON.stringify(employee))
+        localStorage.setItem('roles', JSON.stringify(roles.value))
+        localStorage.setItem('permissions', JSON.stringify([]))
 
-  const logout = () => {
-    user.value = null
-    roles.value = []
-    permissions.value = []
+        return employee
+    }
 
-    localStorage.removeItem('user')
-    localStorage.removeItem('roles')
-    localStorage.removeItem('permissions')
+    const logout = () => {
+        user.value = null
+        roles.value = []
+        permissions.value = []
 
-    api.post('/employee/logout').finally(() => {
-      router.push('/employee/login')
-    })
-  }
+        localStorage.removeItem('user')
+        localStorage.removeItem('roles')
+        localStorage.removeItem('permissions')
 
-  const hasRole = (role) => {
-    return roles.value.includes(role)
-  }
+        api.post('/api/employee/logout').finally(() => {
+            router.push('/api/employee/login')
+        })
+    }
 
-  const hasAnyRole = (requiredRoles) => {
-    return requiredRoles.some(role => roles.value.includes(role))
-  }
+    const hasRole = (role) => {
+        return roles.value.includes(role)
+    }
 
-  const hasPermission = (permission) => {
-    return permissions.value.includes(permission)
-  }
+    const hasAnyRole = (requiredRoles) => {
+        return requiredRoles.some(role => roles.value.includes(role))
+    }
 
-  return {
-    user,
-    roles,
-    permissions,
-    isAuthenticated,
-    currentUser,
-    userRoles,
-    userPermissions,
-    login,
-    logout,
-    hasRole,
-    hasAnyRole,
-    hasPermission
-  }
+    const hasPermission = (permission) => {
+        return permissions.value.includes(permission)
+    }
+
+    return {
+        user,
+        roles,
+        permissions,
+        isAuthenticated,
+        currentUser,
+        userRoles,
+        userPermissions,
+        login,
+        logout,
+        hasRole,
+        hasAnyRole,
+        hasPermission
+    }
 })
