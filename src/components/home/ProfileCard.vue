@@ -7,9 +7,9 @@
       </div>
     </template>
     <div class="profile-content">
-<!--      <div class="avatar-container">-->
-<!--        <el-avatar :size="100" :src="user.avatar" />-->
-<!--      </div>-->
+      <!--      <div class="avatar-container">-->
+      <!--        <el-avatar :size="100" :src="user.avatar" />-->
+      <!--      </div>-->
       <div class="profile-info">
         <div class="info-item">
           <span class="label">姓名：</span>
@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import { useUserStore } from '@/stores/auth'
+import {useUserStore} from '@/stores/auth'
 import {computed} from "vue";
 
 const userStore = useUserStore()
