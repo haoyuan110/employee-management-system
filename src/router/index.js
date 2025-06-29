@@ -49,6 +49,10 @@ import NotFoundView from "@/views/NotFoundView.vue";
 
 const routes = [
   {
+    path: "/",
+    redirect: "/employee/login", // 添加根路径重定向到登录页
+  },
+  {
     path: "/employee/login",
     name: "Login",
     component: LoginView,
