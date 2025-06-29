@@ -42,7 +42,7 @@
       <el-table-column prop="createTime" label="日期" width="120" />
       <el-table-column label="申请的加班时间" width="180">
         <template #default="{ row }">
-          {{ formatTime(row.overtimeDate) }}
+          {{ formatDate(row.overtimeDate) }}
         </template>
       </el-table-column>
       <el-table-column prop="reason" label="原因" />

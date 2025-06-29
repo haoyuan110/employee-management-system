@@ -9,12 +9,6 @@
       <el-table :data="approveList" border style="width: 100%">
         <el-table-column prop="employeeName" label="申请人" width="120" />
         <el-table-column prop="date" label="日期" width="120" />
-        <el-table-column label="时间段" width="180">
-          <template #default="{ row }">
-            {{ row.startTime }} - {{ row.endTime }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="duration" label="时长(小时)" width="120" />
         <el-table-column prop="reason" label="原因" />
         <el-table-column label="操作" width="180">
           <template #default="{ row }">
