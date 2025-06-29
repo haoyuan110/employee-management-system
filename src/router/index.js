@@ -59,7 +59,7 @@ const routes = [
     component: BasicView,
     meta: { requiresAuth: true },
     children: [
-      { path: "", name: "Home", component: HomeView },
+      { path: "home", name: "Home", component: HomeView },
       {
         path: "employee",
         name: "Employee",
