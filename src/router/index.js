@@ -115,7 +115,7 @@ const routes = [
   {
     path: "/profile",
     name: "Profile",
-    component: () => import("@/views/Profile.vue"), // 假设你有一个Profile.vue组件
+    component: () => import("@/views/Profile.vue"),
     meta: { requiresAuth: true }, // 如果需要登录才能访问
   },
   {

@@ -9,46 +9,42 @@ export const useOvertimeStore = defineStore('overtime', () => {
     const pendingApprovals = ref([])
 
     const applyOvertime = async (data) => {
-        // 修改为 /overtime/add 接口
-        const res = await api.post('/overtime/add', data)
+        const res = await api.post('/api/overtime/add', data)
         records.value.unshift(res.data)
         total.value += 1
         return res.data
     }
 
     const getRecords = async (params = {}) => {
-        // 设置默认分页参数，如 pageNum=1, pageSize=10
-        const defaultParams = {
-            pageNum: 1,
-            pageSize: 10,
-            ...params
-        };
-
-        const res = await api.get('/overtime/search', {params: defaultParams})
+        const res = await api.get('/api/overtime/search', {params})
         records.value = res.data.records || []
         total.value = res.data.total
-        return res.data
+        return res
     }
 
     const getOvertimeById = async (overtimeId) => {
-        const res = await api.get(`/overtime/details/${overtimeId}`)
+        const res = await api.get(`/api/overtime/${overtimeId}`)
         return res.data
     }
 
-    const getPendingApprovals = async () => {
-        const res = await api.get('/overtime/approvals')
-        pendingApprovals.value = res.data
+    const getOvertimeCurrent = async (params) => {
+        const res = await api.get('/api/overtime/current', {params})
         return res.data
     }
+
+    // const getPendingApprovals = async () => {
+    //     const res = await api.get('/api/overtime/approvals')
+    //     pendingApprovals.value = res.data
+    //     return res.data
+    // }
 
     const approveOvertime = async (data) => {
-        // 修改为 /overtime/approve 接口，并按后端要求的格式提交数据
-        const res = await api.put('/overtime/approve', data)
+        const res = await api.put('/api/overtime/approve', data)
         return res.data
     }
 
-    const cancelOvertime = async (id) => {
-        await api.post(`/overtime/delete/${id}`)
+    const deleteOvertime = async (id) => {
+        await api.post(`/api/overtime/delete/${id}`)
         const index = records.value.findIndex(r => r.id === id)
         if (index !== -1) {
             records.value.splice(index, 1)
@@ -62,8 +58,10 @@ export const useOvertimeStore = defineStore('overtime', () => {
         pendingApprovals,
         applyOvertime,
         getRecords,
-        getPendingApprovals,
+        getOvertimeById,
+        getOvertimeCurrent,
+        // getPendingApprovals,
         approveOvertime,
-        cancelOvertime
+        deleteOvertime
     }
 })

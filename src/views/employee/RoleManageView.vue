@@ -39,21 +39,21 @@ import { ElMessage } from 'element-plus'
 
 const roles = ref([
   {
-    id: 1,
+    id: 0,
     name: '管理员',
     code: 'admin',
     description: '系统管理员，拥有所有权限',
     status: true
   },
   {
-    id: 2,
+    id: 1,
     name: '部门经理',
     code: 'manager',
     description: '部门经理，拥有部门管理权限',
     status: true
   },
   {
-    id: 3,
+    id: 2,
     name: '普通员工',
     code: 'staff',
     description: '普通员工，拥有基本权限',

@@ -11,10 +11,20 @@
             end-placeholder="结束日期"
           />
         </el-form-item>
-        <el-form-item label="状态">
-          <el-select v-model="searchForm.status" placeholder="请选择状态">
+        <el-form-item label="审批状态">
+          <el-select v-model="searchForm.isApprove" placeholder="请选择审批状态">
             <el-option
-              v-for="item in statusOptions"
+              v-for="item in approveOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="是否通过">
+          <el-select v-model="searchForm.isPass" placeholder="请选择是否通过">
+            <el-option
+              v-for="item in passOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -29,23 +39,17 @@
     </div>
 
     <el-table :data="overtimeRecords" border style="width: 100%">
-      <el-table-column prop="date" label="日期" width="120" />
-      <el-table-column label="时间段" width="180">
+      <el-table-column prop="createTime" label="日期" width="120" />
+      <el-table-column label="申请的加班时间" width="180">
         <template #default="{ row }">
-          {{ formatTime(row.startTime) }} - {{ formatTime(row.endTime) }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="duration" label="时长(小时)" width="120" />
-      <el-table-column prop="type" label="类型" width="120">
-        <template #default="{ row }">
-          {{ getTypeLabel(row.type) }}
+          {{ formatTime(row.overtimeDate) }}
         </template>
       </el-table-column>
       <el-table-column prop="reason" label="原因" />
       <el-table-column prop="status" label="状态" width="120">
         <template #default="{ row }">
-          <el-tag :type="getStatusTagType(row.status)">
-            {{ getStatusLabel(row.status) }}
+          <el-tag :type="getStatusTagType(row.isApprove, row.isPass)">
+            {{ getStatusLabel(row.isApprove, row.isPass) }}
           </el-tag>
         </template>
       </el-table-column>
@@ -65,7 +69,7 @@
 
     <div class="pagination">
       <el-pagination
-        v-model:current-page="pagination.currentPage"
+        v-model:current-page="pagination.pageNum"
         v-model:page-size="pagination.pageSize"
         :total="pagination.total"
         layout="total, sizes, prev, pager, next, jumper"
@@ -80,23 +84,30 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useOvertimeStore } from '@/stores/overtime'
 import { formatDate, formatTime } from '@/utils/date'
+import {ElMessage} from "element-plus";
 
 const overtimeStore = useOvertimeStore()
 
 const searchForm = reactive({
   dateRange: [],
-  status: ''
+  isApprove: null,
+  isPass: null
 })
 
-const statusOptions = [
-  { value: 'pending', label: '待审批' },
-  { value: 'approved', label: '已批准' },
-  { value: 'rejected', label: '已拒绝' },
-  { value: 'canceled', label: '已取消' }
+const approveOptions = [
+  { value: null, label: '全部' },
+  { value: 0, label: '未审批' },
+  { value: 1, label: '已审批' },
+]
+
+const passOptions = [
+  { value: null, label: '全部' },
+  { value: 0, label: '未通过' },
+  { value: 1, label: '已通过' },
 ]
 
 const pagination = reactive({
-  currentPage: 1,
+  pageNum: 1,
   pageSize: 10,
   total: 0
 })
@@ -105,20 +116,21 @@ const overtimeRecords = ref([])
 
 const fetchData = async () => {
   const params = {
-    page: pagination.currentPage,
-    size: pagination.pageSize,
-    startDate: searchForm.dateRange[0] ? formatDate(searchForm.dateRange[0]) : '',
-    endDate: searchForm.dateRange[1] ? formatDate(searchForm.dateRange[1]) : '',
-    status: searchForm.status
+    pageNum: pagination.pageNum,
+    pageSize: pagination.pageSize,
+    startDate: searchForm.dateRange[0] ? formatDate(searchForm.dateRange[0]) : null,
+    endDate: searchForm.dateRange[1] ? formatDate(searchForm.dateRange[1]) : null,
+    isApprove: searchForm.isApprove,
+    isPass: searchForm.isPass
   }
 
-  const res = await overtimeStore.getOvertimeRecords(params)
-  overtimeRecords.value = res.data
+  const res = await overtimeStore.getOvertimeCurrent(params)
+  overtimeRecords.value = res.records || []
   pagination.total = res.total
 }
 
 const handleSearch = () => {
-  pagination.currentPage = 1
+  pagination.pageNum = 1
   fetchData()
 }
 
@@ -128,35 +140,33 @@ const resetSearch = () => {
   handleSearch()
 }
 
-const getTypeLabel = (type) => {
-  const map = {
-    weekday: '平日加班',
-    weekend: '周末加班',
-    holiday: '节假日加班',
-    emergency: '紧急加班'
+const getStatusLabel = (isApprove, isPass) => {
+  if (isApprove === 0) {
+    return '待审批'
+  } else if (isApprove === 1 && isPass === 0) {
+    return '已拒绝'
+  } else if (isApprove === 1 && isPass === 1) {
+    return '已批准'
   }
-  return map[type] || type
+  return '未知状态'
 }
 
-const getStatusLabel = (status) => {
-  return statusOptions.find(item => item.value === status)?.label || status
-}
-
-const getStatusTagType = (status) => {
-  const map = {
-    pending: 'warning',
-    approved: 'success',
-    rejected: 'danger',
-    canceled: 'info'
+const getStatusTagType = (isApprove, isPass) => {
+  if (isApprove === 0) {
+    return 'warning'
+  } else if (isApprove === 1 && isPass === 0) {
+    return 'danger'
+  } else if (isApprove === 1 && isPass === 1) {
+    return 'success'
   }
-  return map[status] || ''
+  return ''
 }
 
 const handleCancel = async (row) => {
   try {
-    await overtimeStore.cancelOvertime(row.id)
+    await overtimeStore.deleteOvertime(row.id)
     ElMessage.success('取消成功')
-    fetchData()
+    await fetchData()
   } catch (error) {
     ElMessage.error('取消失败')
   }

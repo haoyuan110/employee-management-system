@@ -7,11 +7,11 @@ export const useEmployeeStore = defineStore('employee', () => {
     const employees = ref([])     // 员工列表数据
     const total = ref(0)          // 员工总数
     const departments = ref([     // 部门静态数据（模拟）
-        {id: 1, name: '开发部'},
-        {id: 2, name: '设计部'},
-        {id: 3, name: '产品部'},
-        {id: 4, name: '市场部'},
-        {id: 5, name: '人力资源部'}
+        // {id: 1, name: '开发部'},
+        // {id: 2, name: '设计部'},
+        // {id: 3, name: '产品部'},
+        // {id: 4, name: '市场部'},
+        // {id: 5, name: '人力资源部'}
     ])
 
     const getEmployees = async (params = {}) => {

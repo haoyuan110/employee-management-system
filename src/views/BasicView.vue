@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Location,} from '@element-plus/icons-vue'
+import {Location, Notebook,} from '@element-plus/icons-vue'
 import {ElMessage} from "element-plus";
 
 import {useRouter} from "vue-router";
@@ -125,9 +125,15 @@ const handleLogout = () => {
                   </el-icon>
                   <span>加班管理</span>
                 </template>
-                <el-menu-item index="5-1">加班申请</el-menu-item>
-                <el-menu-item index="5-2">加班记录</el-menu-item>
-                <el-menu-item index="5-3">加班审批</el-menu-item>
+                <router-link :to="{ path: '/overtime/apply' }" style="text-decoration: none;">
+                  <el-menu-item index="5-1">加班申请</el-menu-item>
+                </router-link>
+                <router-link :to="{ path: '/overtime' }" style="text-decoration: none;">
+                  <el-menu-item index="5-2">加班记录</el-menu-item>
+                </router-link>
+                <router-link :to="{ path: '/overtime/approve' }" style="text-decoration: none;">
+                  <el-menu-item index="5-3">加班审批</el-menu-item>
+                </router-link>
               </el-sub-menu>
               <el-sub-menu index="6">
                 <template #title>
