@@ -89,7 +89,7 @@ const handleLogin = async () => {
     loading.value = true
     const result = await userStore.login(formData.value)
     ElMessage.success('登录成功')
-    router.push('/')
+    router.push('/home')
   } catch (error) {
     ElMessage.error('登录失败，请检查用户名或密码')
   } finally {
