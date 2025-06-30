@@ -123,13 +123,13 @@ const handleLogout = () => {
                   </el-icon>
                   <span>请假管理</span>
                 </template>
-                <router-link :to="{ path: '/holiday/apply' }" style="text-decoration: none;">
+                <router-link :to="{ path: '/leave/apply' }" style="text-decoration: none;">
                   <el-menu-item index="4-1">请假申请</el-menu-item>
                 </router-link>
-                <router-link :to="{ path: '/holiday' }" style="text-decoration: none;">
+                <router-link :to="{ path: '/leave' }" style="text-decoration: none;">
                   <el-menu-item index="4-2">请假记录</el-menu-item>
                 </router-link>
-                <router-link :to="{ path: '/holiday/approve' }" style="text-decoration: none;">
+                <router-link :to="{ path: '/leave/approve' }" style="text-decoration: none;">
                   <el-menu-item index="4-3">请假审批</el-menu-item>
                 </router-link>
               </el-sub-menu>
@@ -157,9 +157,15 @@ const handleLogout = () => {
                   </el-icon>
                   <span>出差管理</span>
                 </template>
-                <el-menu-item index="6-1">出差申请</el-menu-item>
-                <el-menu-item index="6-2">出差记录</el-menu-item>
-                <el-menu-item index="6-3">出差审批</el-menu-item>
+                <router-link :to="{ path: '/business/apply' }" style="text-decoration: none;">
+                  <el-menu-item index="6-1">出差申请</el-menu-item>
+                </router-link>
+                <router-link :to="{ path: '/business' }" style="text-decoration: none;">
+                  <el-menu-item index="6-2">出差记录</el-menu-item>
+                </router-link>
+                <router-link :to="{ path: '/business/approve' }" style="text-decoration: none;">
+                  <el-menu-item index="6-3">出差审批</el-menu-item>
+                </router-link>
               </el-sub-menu>
             </el-menu>
           </el-aside>

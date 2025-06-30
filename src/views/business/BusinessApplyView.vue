@@ -13,13 +13,8 @@
 
 <script setup>
 import BusinessApplyForm from '@/components/business/BusinessApplyForm.vue'
-import { useRouter } from 'vue-router'
 
-const router = useRouter()
 
-const handleSuccess = () => {
-  router.push('/business')
-}
 </script>
 
 <style scoped>

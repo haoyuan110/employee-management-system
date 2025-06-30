@@ -34,6 +34,7 @@ import NoticeDetailView from "@/views/notice/NoticeDetailView.vue";
 // 404 页面
 import NotFoundView from "@/views/NotFoundView.vue";
 import LeaveApproveView from "@/views/leave/LeaveApproveView.vue";
+import BusinessApproveView from "@/views/business/BusinessApproveView.vue";
 
 // 添加测试输出：检查组件是否被正确引入
 // console.log('LoginView:', LoginView)
@@ -102,6 +103,14 @@ const routes = [
                 component: RoleManageView,
                 meta: {roles: ["admin"]},
             },
+            {path: "leave", name: "Leave", component: LeaveView},
+            {path: "leave/apply", name: "LeaveApply", component: LeaveApplyView},
+            {
+                path: "leave/approve",
+                name: "LeaveApprove",
+                component: LeaveApproveView,
+                meta: {roles: ["admin", "manager"]},
+            },
             {path: "overtime", name: "Overtime", component: OvertimeView},
             {
                 path: "overtime/apply",
@@ -114,25 +123,23 @@ const routes = [
                 component: OvertimeApproveView,
                 meta: {roles: ["admin", "manager"]},
             },
-            {
-                path: "statistics",
-                name: "Statistics",
-                component: StatisticsView,
-                meta: {roles: ["admin", "manager"]},
-            },
-            {path: "leave", name: "Leave", component: LeaveView},
-            {path: "leave/apply", name: "LeaveApply", component: LeaveApplyView},
-            {
-                path: "leave/approve",
-                name: "LeaveApprove",
-                component: LeaveApproveView,
-                meta: {roles: ["admin", "manager"]},
-            },
             {path: "business", name: "Business", component: BusinessView},
             {
                 path: "business/apply",
                 name: "BusinessApply",
                 component: BusinessApplyView,
+            },
+            {
+                path: "business/approve",
+                name: "BusinessApprove",
+                component: BusinessApproveView,
+                meta: {roles: ["admin", "manager"]},
+            },
+            {
+                path: "statistics",
+                name: "Statistics",
+                component: StatisticsView,
+                meta: {roles: ["admin", "manager"]},
             },
             {path: "notice", name: "Notice", component: NoticeView},
             {

@@ -8,24 +8,46 @@ export const useBusinessStore = defineStore('business', () => {
   const total = ref(0)
 
   const applyBusiness = async (data) => {
-    const res = await api.post('/business', data)
+    const res = await api.post('/api/business/add', data)
     records.value.unshift(res.data)
     total.value += 1
     return res.data
   }
 
   const getRecords = async (params = {}) => {
-    const res = await api.get('/business', { params })
-    records.value = res.data
-    total.value = res.total
+    const res = await api.get('/api/business/search', { params })
+    records.value = res.data.records || []
+    total.value = res.data.total
     return res
   }
 
-  const cancelBusiness = async (id) => {
-    await api.put(`/business/${id}/cancel`)
+  const getBusinessById = async (overtimeId) => {
+    const res = await api.get(`/api/business/${overtimeId}`)
+    return res.data
+  }
+
+  const getBusinessCurrent = async (params) => {
+    const res = await api.get('/api/business/current', {params})
+    return res.data
+  }
+
+  const approveBusiness = async (data) => {
+    const res = await api.put('/api/business/approve', data)
+    // 更新本地记录
+    const index = records.value.findIndex(r => r.overtimeId === data.id)
+    if (index !== -1) {
+      records.value[index].isApprove = 1
+      records.value[index].isPass = data.isPass
+    }
+    return res.data
+  }
+
+  const deleteOvertime = async (id) => {
+    await api.post(`/api/business/delete/${id}`)
     const index = records.value.findIndex(r => r.id === id)
     if (index !== -1) {
-      records.value[index].status = 'canceled'
+      records.value.splice(index, 1)
+      total.value -= 1
     }
   }
 
@@ -34,6 +56,9 @@ export const useBusinessStore = defineStore('business', () => {
     total,
     applyBusiness,
     getRecords,
-    cancelBusiness
+    getBusinessById,
+    getBusinessCurrent,
+    approveBusiness,
+    deleteOvertime
   }
 })
