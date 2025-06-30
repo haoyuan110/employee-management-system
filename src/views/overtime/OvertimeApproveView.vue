@@ -7,8 +7,12 @@
         </div>
       </template>
       <el-table :data="approveList" border style="width: 100%">
-        <el-table-column prop="employeeName" label="申请人" width="120" />
-        <el-table-column prop="date" label="日期" width="120" />
+        <el-table-column prop="overtimeEmpName" label="申请人" width="120" />
+        <el-table-column prop="overtimeDate" label="加班日期" width="120">
+          <template #default="{ row }">
+            {{ formatDate(row.overtimeDate) }}
+          </template>
+        </el-table-column>
         <el-table-column prop="reason" label="原因" />
         <el-table-column label="操作" width="180">
           <template #default="{ row }">
@@ -25,23 +29,28 @@
 import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useOvertimeStore } from '@/stores/overtime'
+import { formatDate } from '@/utils/date'
 
 const overtimeStore = useOvertimeStore()
 const approveList = ref([])
 
 const fetchApproveList = async () => {
-  const res = await overtimeStore.getApproveList()
-  approveList.value = res.data
+  // 添加默认页码参数 (pageNum=1, pageSize=10) 和 状态过滤 (isApprove=0)
+  const pageNum = 1
+  const pageSize = 10
+  const isApprove = 0
+  const res = await overtimeStore.getRecords({ pageNum, pageSize, isApprove })
+  approveList.value = res.data.records
 }
 
 const handleApprove = async (row, isApprove) => {
   try {
     await overtimeStore.approveOvertime({
-      id: row.id,
-      status: isApprove ? 'approved' : 'rejected'
+      overtimeId: row.overtimeId,
+      isPass: isApprove ? 1 : 0
     })
     ElMessage.success('操作成功')
-    fetchApproveList()
+    await fetchApproveList()
   } catch (error) {
     ElMessage.error('操作失败')
   }
@@ -51,9 +60,3 @@ onMounted(() => {
   fetchApproveList()
 })
 </script>
-
-<style scoped>
-.overtime-approve-view {
-  padding: 20px;
-}
-</style>

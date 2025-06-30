@@ -40,6 +40,12 @@ export const useOvertimeStore = defineStore('overtime', () => {
 
     const approveOvertime = async (data) => {
         const res = await api.put('/api/overtime/approve', data)
+        // 更新本地记录
+        const index = records.value.findIndex(r => r.overtimeId === data.id)
+        if (index !== -1) {
+            records.value[index].isApprove = 1
+            records.value[index].isPass = data.isPass
+        }
         return res.data
     }
 
