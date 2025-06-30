@@ -1,11 +1,22 @@
 import jwtDecode from 'jwt-decode'
 
-/**
- * 检查token是否有效
- * @param {string} token
- * @returns {boolean}
- */
-export function isTokenValid(token) {
+const TokenKey = 'vue_admin_template_token'
+
+// Token 存储管理
+export function getToken() {
+  return localStorage.getItem(TokenKey)
+}
+
+export function setToken(token) {
+  return localStorage.setItem(TokenKey, token)
+}
+
+export function removeToken() {
+  return localStorage.removeItem(TokenKey)
+}
+
+// Token 验证和解析
+export function isTokenValid(token = getToken()) {
   if (!token) return false
 
   try {
@@ -18,21 +29,18 @@ export function isTokenValid(token) {
   }
 }
 
-/**
- * 从token中获取用户信息
- * @param {string} token
- * @returns {object|null}
- */
-export function getUserFromToken(token) {
+export function getUserFromToken(token = getToken()) {
   if (!token) return null
 
   try {
     const decoded = jwtDecode(token)
     return {
-      id: decoded.sub,
-      name: decoded.name,
+      id: decoded.sub || decoded.userId,
+      name: decoded.name || decoded.username,
       roles: decoded.roles || [],
-      permissions: decoded.permissions || []
+      permissions: decoded.permissions || [],
+      // 添加其他可能需要的字段
+      ...decoded
     }
   } catch (error) {
     console.error('Token解析失败:', error)
@@ -40,12 +48,7 @@ export function getUserFromToken(token) {
   }
 }
 
-/**
- * 检查用户是否有指定角色
- * @param {array} userRoles
- * @param {string|array} requiredRoles
- * @returns {boolean}
- */
+// 权限检查
 export function hasRole(userRoles, requiredRoles) {
   if (!userRoles || !userRoles.length) return false
 
@@ -55,12 +58,6 @@ export function hasRole(userRoles, requiredRoles) {
   return userRoles.includes(requiredRoles)
 }
 
-/**
- * 检查用户是否有指定权限
- * @param {array} userPermissions
- * @param {string|array} requiredPermissions
- * @returns {boolean}
- */
 export function hasPermission(userPermissions, requiredPermissions) {
   if (!userPermissions || !userPermissions.length) return false
 
@@ -70,11 +67,7 @@ export function hasPermission(userPermissions, requiredPermissions) {
   return userPermissions.includes(requiredPermissions)
 }
 
-/**
- * 格式化文件大小
- * @param {number} bytes
- * @returns {string}
- */
+// 工具函数
 export function formatFileSize(bytes) {
   if (bytes === 0) return '0 Bytes'
 
@@ -85,12 +78,6 @@ export function formatFileSize(bytes) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
-/**
- * 防抖函数
- * @param {function} func
- * @param {number} delay
- * @returns {function}
- */
 export function debounce(func, delay = 300) {
   let timer = null
   return function(...args) {
@@ -101,12 +88,6 @@ export function debounce(func, delay = 300) {
   }
 }
 
-/**
- * 节流函数
- * @param {function} func
- * @param {number} threshold
- * @returns {function}
- */
 export function throttle(func, threshold = 300) {
   let last = 0
   return function(...args) {
@@ -116,4 +97,18 @@ export function throttle(func, threshold = 300) {
       last = now
     }
   }
+}
+
+// 默认导出常用功能
+export default {
+  getToken,
+  setToken,
+  removeToken,
+  isTokenValid,
+  getUserFromToken,
+  hasRole,
+  hasPermission,
+  formatFileSize,
+  debounce,
+  throttle
 }

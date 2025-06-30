@@ -199,6 +199,13 @@ const saveProfile = async () => {
   }
 }
 
+// 重置表单函数
+const resetForm = () => {
+  userInfo.value = {...originalUserInfo}
+  ElMessage.success('表单已重置')
+}
+
+
 // 页面加载时获取员工信息
 onMounted(() => {
   fetchEmployeeInfo()
