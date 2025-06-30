@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import {Location, Notebook,} from '@element-plus/icons-vue'
-import {ElMessage} from "element-plus";
-
-import {useRouter} from "vue-router";
+import {Location, Notebook, Edit as EditIcon, SwitchButton, User, Edit, Document} from '@element-plus/icons-vue'
+import {ElMessage} from "element-plus"
+import {useRouter} from "vue-router"
 
 const router = useRouter()
 
@@ -20,6 +19,11 @@ const viewProfile = () => {
   router.push('/profile')
 }
 
+// 修改密码
+const changePassword = () => {
+  router.push('/change-password')
+}
+
 // 退出登录
 const handleLogout = () => {
   // 清除登录状态
@@ -27,7 +31,6 @@ const handleLogout = () => {
   ElMessage.success('已退出登录')
   router.push('/employee/login')
 }
-
 </script>
 
 <template>
@@ -51,6 +54,12 @@ const handleLogout = () => {
                         <user/>
                       </el-icon>
                       查看个人信息
+                    </el-dropdown-item>
+                    <el-dropdown-item @click="changePassword">
+                      <el-icon>
+                        <edit />
+                      </el-icon>
+                      修改密码
                     </el-dropdown-item>
                     <el-dropdown-item divided @click="handleLogout">
                       <el-icon>
@@ -114,9 +123,15 @@ const handleLogout = () => {
                   </el-icon>
                   <span>请假管理</span>
                 </template>
-                <el-menu-item index="4-1">请假申请</el-menu-item>
-                <el-menu-item index="4-2">请假记录</el-menu-item>
-                <el-menu-item index="4-3">请假审批</el-menu-item>
+                <router-link :to="{ path: '/holiday/apply' }" style="text-decoration: none;">
+                  <el-menu-item index="4-1">请假申请</el-menu-item>
+                </router-link>
+                <router-link :to="{ path: '/holiday' }" style="text-decoration: none;">
+                  <el-menu-item index="4-2">请假记录</el-menu-item>
+                </router-link>
+                <router-link :to="{ path: '/holiday/approve' }" style="text-decoration: none;">
+                  <el-menu-item index="4-3">请假审批</el-menu-item>
+                </router-link>
               </el-sub-menu>
               <el-sub-menu index="5">
                 <template #title>

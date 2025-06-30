@@ -6,20 +6,14 @@
           <h3>请假申请</h3>
         </div>
       </template>
-      <LeaveApplyForm @success="handleSuccess" />
+      <LeaveApplyForm/>
     </el-card>
   </div>
 </template>
 
 <script setup>
 import LeaveApplyForm from '@/components/leave/LeaveApplyForm.vue'
-import { useRouter } from 'vue-router'
 
-const router = useRouter()
-
-const handleSuccess = () => {
-  router.push('/leave')
-}
 </script>
 
 <style scoped>
